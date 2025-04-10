@@ -13,8 +13,8 @@
     <main>
         <p>Saker här</p>
         <div id="search-container" class="search-container">
-            <input type="text" placeholder="Sök här..." aria-label="Sökfält">
-            <button>Sök</button>
+            <input type="text" id="soktext" placeholder="Sök här..." aria-label="Sökfält" oninput="searchFood(this.value)">
+            <button onclick="searchFood(document.getElementById('soktext').value)">Sök</button>
         </div>
         <div id="mat" class="mat"></div>
     </main>
