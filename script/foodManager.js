@@ -1,6 +1,7 @@
 const foodDetails = document.getElementById("food-details");
 const detailsContainer = document.getElementById("details-container");
 let savedItems = JSON.parse(localStorage.getItem("minMat")) || [];
+let currentFilteredData = [];
 
 function renderFoodList() {
     foodDetails.innerHTML = "";
@@ -40,10 +41,18 @@ async function showDetails(number) {
 }
 
 function renderDetails(data) {
+    // Define a regex to match specific item names
+    const regex = /Protein|Fett|Kolhydrater/i; // Example: Match "Protein", "Fett", or "Kolhydrater" (case-insensitive)
+
+    // Filter the data array to include only items with matching names
+    const filteredData = data.filter(item => regex.test(item.namn));
+    currentFilteredData = filteredData; // Store the filtered data for later use
+
+    // Render the filtered details
     detailsContainer.innerHTML = `
         <h3>Detaljer för ${data[0]?.matrisenhet || "okänd maträtt"}:</h3>
         <ul>
-            ${data.map(item => `
+            ${filteredData.map(item => `
                 <li>
                     <strong>${item.namn}</strong>: ${item.varde} ${item.enhet} (${item.matrisenhet})
                 </li>
@@ -52,4 +61,15 @@ function renderDetails(data) {
     `;
 }
 
+function updatePortionSize(value) {
+    let portionSize = document.getElementById("portionSize").value;
+    detailsContainer.innerHTML = `        <h3>Detaljer för ${currentFilteredData[0]?.matrisenhet || "okänd maträtt"}:</h3>
+        <ul>
+            ${currentFilteredData.map(item => `
+                <li>
+                    <strong>${item.namn}</strong>: ${Math.round(item.varde * (value / 100),2)} ${item.enhet} per ${value}${item.enhet}
+                </li>
+            `).join("")}
+        </ul>`;
+}
 renderFoodList();
