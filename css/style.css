@@ -36,3 +36,13 @@ main {
 .search-container button:hover {
     background-color: #005a9e;
 }
+
+.card
+{
+    border: 2px solid black;
+}
+
+.meny
+{
+    text-align: left;
+}

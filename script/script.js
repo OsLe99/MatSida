@@ -11,7 +11,7 @@ function searchFood(foodSearch)
     const filteredData = allFood.filter(function (food) {
         return food.namn.toLowerCase().includes(textSearch);
     });
-
+    
     filteredData.map(function (food) {
         let card = document.createElement("div");
             card.setAttribute("class", "card");
@@ -37,5 +37,5 @@ fetch(url)
         allFood = data.livsmedel;
         searchFood(""); // Visa alla livsmedel vid första inläsning
         }).catch(function (error) {
-            console.error("Error fetching data:", error);
+            console.error("Fel vid hämtning av data: ", error);
         });
