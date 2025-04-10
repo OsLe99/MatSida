@@ -70,6 +70,44 @@ function updatePortionSize(value) {
                     <strong>${item.namn}</strong>: ${Math.round(item.varde * (value / 100),2)} ${item.enhet} per ${value}${item.enhet}
                 </li>
             `).join("")}
+            <input type="button" value="Lägg till" onclick="addToMinMåltid"(${currentFilteredData[0].nummer, value})>
         </ul>`;
 }
+
+function addToMinMåltid(number, portionSize) {
+    let savedItems = JSON.parse(localStorage.getItem("minMåltid")) || [];
+    const foodItem = savedItems.find(item => item.nummer === number);
+    if (foodItem) {
+        foodItem.portionSize = portionSize;
+    } else {
+        alert("Livsmedlet finns inte i din lista.");
+    }
+    localStorage.setItem("minMåltid", JSON.stringify(savedItems));
+
+    let minMåltid = document.getElementById("minMåltid");
+    let foodTest = document.createElement("li");
+    foodTest.innerHTML = `<strong>${currentFilteredData[0].namn}</strong> - Portion: ${portionSize} ${currentFilteredData[0].enhet}`;
+    minMåltid.appendChild(foodTest);
+}
+
+function renderMinMåltid() {
+    let savedItems = JSON.parse(localStorage.getItem("minMåltid")) || [];
+    let minMåltid = document.getElementById("minMåltid");
+    minMåltid.innerHTML = ""; // Clear the list before rendering
+
+    if (savedItems.length === 0) {
+        minMåltid.innerHTML = "<p>Inga måltider har lagts till ännu.</p>";
+    } else {
+        savedItems.forEach(item => {
+            let listItem = document.createElement("li");
+            listItem.innerHTML = `<strong>${item.namn}</strong> - Portion: ${item.portionSize} ${item.enhet}`;
+            minMåltid.appendChild(listItem);
+        });
+    }
+}
+// Call renderMinMåltid when måltider.html loads
+if (document.getElementById("minMåltid")) {
+    renderMinMåltid();
+}
+
 renderFoodList();
