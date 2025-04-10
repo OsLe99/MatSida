@@ -2,8 +2,6 @@ const url = "https://dataportal.livsmedelsverket.se/livsmedel/api/v1/livsmedel?o
 const mat = document.getElementById("mat");
 let allFood = [];
 
-
-
 function searchFood(foodSearch) 
 {
     const textSearch = foodSearch.toLowerCase();
@@ -14,28 +12,40 @@ function searchFood(foodSearch)
     
     filteredData.map(function (food) {
         let card = document.createElement("div");
-            card.setAttribute("class", "card");
+        card.setAttribute("class", "card");
 
-            let title = document.createElement("h3");
-            title.innerHTML = food.namn;
+        let title = document.createElement("h3");
+        title.innerHTML = food.namn;
 
-            let number = document.createElement("h4");
-            number.innerHTML = food.nummer;
+        let number = document.createElement("h4");
+        number.innerHTML = food.nummer;
 
+        let button = document.createElement("button");
+        button.innerHTML = "Lägg till";
+        button.onclick = function () {
+            addToMinMat(food);
+        };
 
-            card.appendChild(number);
-            card.appendChild(title);
-            mat.appendChild(card);
-    })
+        card.appendChild(number);
+        card.appendChild(title);
+        card.appendChild(button);
+        mat.appendChild(card);
+    });
 }
 
+function addToMinMat(food) {
+    let savedItems = JSON.parse(localStorage.getItem("minMat")) || [];
+    savedItems.push(food);
+    localStorage.setItem("minMat", JSON.stringify(savedItems));
+    alert(`${food.namn} har lagts till i din lista!`);
+}
 
 fetch(url)
     .then(function (response) {
         return response.json();
     }).then(function (data) {
         allFood = data.livsmedel;
-        searchFood(""); // Visa alla livsmedel vid första inläsning
+        searchFood(""); // Visa alla livsmedel i början
         }).catch(function (error) {
             console.error("Fel vid hämtning av data: ", error);
         });
